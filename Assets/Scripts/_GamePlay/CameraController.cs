@@ -22,12 +22,18 @@ public class CameraController : MonoBehaviour
 
     private Vector3 runnerOffset;
     private Vector3 painterOffset;
+    private Quaternion painterRotation;
+    private Quaternion runnerRotation;
+    private Quaternion currentRotation;
     void Start()
     {
         runnerOffset = followTf.position - transform.position;
         offset = runnerOffset;
-        painterOffset = new Vector3(0, -2, 5);
+        painterOffset = new Vector3(0.2f, -4, 6);
+        painterRotation = Quaternion.Euler(15, -0, 0);
         GameManager.Instance.onPhaseChange += HandlePhaseChange;
+        runnerRotation = transform.rotation;
+        currentRotation = runnerRotation;
     }
 
     private void HandlePhaseChange(GameManager.GamePhase phase)
@@ -35,10 +41,12 @@ public class CameraController : MonoBehaviour
         if (phase == GameManager.GamePhase.Runner)
         {
             offset = runnerOffset;
+            currentRotation = runnerRotation;
         }
         if (phase == GameManager.GamePhase.Paint)
         {
-            offset = painterOffset;
+            offset = painterRotation * painterOffset;
+            currentRotation = painterRotation;
         }
     }
 
@@ -53,6 +61,7 @@ public class CameraController : MonoBehaviour
                 break;
             case FollowMode.SmoothDamp:
                 transform.position = Vector3.SmoothDamp(transform.position, target, ref refVel, smoothTime);
+                transform.rotation = Quaternion.Slerp(transform.rotation, currentRotation, Time.deltaTime * 3);
                 break;
             default:
                 break;

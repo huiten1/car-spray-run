@@ -12,8 +12,8 @@ public class SideMovement : MonoBehaviour
     float t = 0;
     void Start()
     {
-        left = transform.position + Vector3.left * span / 2f;
-        right = transform.position + Vector3.right * span / 2f;
+        left = new Vector3(-span / 2f, 0, transform.position.z);
+        right = new Vector3(span / 2f, 0, transform.position.z);
         t = cycleOffset * speed;
     }
     void Update()

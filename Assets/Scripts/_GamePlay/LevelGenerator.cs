@@ -35,17 +35,14 @@ public class LevelGenerator : MonoBehaviour
             }
         }
         var car = Instantiate(Resources.Load<GameObject>("Cars/car1"));
-        var car2 = Instantiate(Resources.Load<GameObject>("Cars/car2"));
         paintSections[0].AddCar(car);
         paintSections[0].onTankEmpty += () =>
         {
-            car.transform.DOScale(0, 0.3f);
+            // car.transform.DOScale(0, 0.3f);
+            paintSections[0].AddCar(Instantiate(car));
+            paintSections[1].AddCar(car);
         };
-        paintSections[1].AddCar(car2);
-        paintSections[1].onTankEmpty += () =>
-        {
-            car2.transform.DOScale(0, 0.3f);
-        };
-        // paintSections[1].onTankEmpty += () => car.SetActive(false);
+
+        CanvasManager.Instance.SetPaintProgressTrackingObject(car);
     }
 }

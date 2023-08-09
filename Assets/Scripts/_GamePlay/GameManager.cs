@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -13,24 +15,41 @@ public class GameManager : Singleton<GameManager>
         Runner,
         Paint
     }
-
+    public GameData gameData;
     public bool isPlaying { get; private set; }
     public GamePhase currentPhase { get; private set; }
+    public int Gold { get => gameData.playerGold; set => gameData.playerGold = value; }
     private void SetPhase(GamePhase phase) { currentPhase = phase; onPhaseChange?.Invoke(currentPhase); }
     private void Start()
     {
-        Player.Instance.OnEnterPaintSection += HandleEnterPaintSection;
+        PaintSection.OnPlayerEnterPaintSection += HandleEnterPaintSection;
+        gameData = SaveManager.Load<GameData>();
+    }
+    private void OnDestroy()
+    {
+        PaintSection.OnPlayerEnterPaintSection -= HandleEnterPaintSection;
     }
 
     private void HandleEnterPaintSection(PaintSection section)
     {
         SetPhase(GamePhase.Paint);
         section.isPainting = true;
+        CanvasManager.Instance.ShowPaintSectionUI();
         section.onTankEmpty += () =>
         {
             section.isPainting = false;
             SetPhase(GamePhase.Runner);
-
+            CanvasManager.Instance.ShowHud();
+        };
+        section.car.onPainted += async () =>
+        {
+            for (float i = 0; i < 0.6f; i += Time.deltaTime)
+            {
+                await Task.Yield();
+            }
+            section.isPainting = false;
+            SetPhase(GamePhase.Runner);
+            CanvasManager.Instance.ShowHud();
         };
     }
     public void GameStart()
@@ -51,6 +70,10 @@ public class GameManager : Singleton<GameManager>
     }
     public void Restart()
     {
-
+        Reload();
+    }
+    internal void Reload()
+    {
+        SceneManager.LoadScene("Main");
     }
 }
