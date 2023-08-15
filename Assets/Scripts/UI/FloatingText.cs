@@ -9,8 +9,24 @@ public class FloatingText : MonoBehaviour
     public string Text { get => text.text; set => text.SetText(value); }
     public Vector3 targetOffset;
     public float duration = 1f;
+    public float fontSize = 72f;
+    public DissapearType dissapearType;
+    public enum DissapearType
+    {
+        Fade,
+        None
+    }
     void Start()
     {
-        transform.DOMove(transform.position + targetOffset, duration);
+        text.fontSize = fontSize;
+        switch (dissapearType)
+        {
+            case DissapearType.Fade:
+                text.DOFade(0, duration);
+                break;
+            default:
+                break;
+        }
+        transform.DOMove(transform.position + targetOffset, duration).SetEase(Ease.OutQuad);
     }
 }

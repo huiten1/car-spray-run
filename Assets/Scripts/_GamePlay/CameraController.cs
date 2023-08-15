@@ -11,7 +11,6 @@ public class CameraController : MonoBehaviour
         SmoothDamp
     }
     [SerializeField] FollowMode followMode;
-
     bool isSmoothTime => followMode == FollowMode.SmoothDamp;
     [NaughtyAttributes.ShowIf("isSmoothTime")]
     [SerializeField] float smoothTime = 0.5f;
@@ -25,12 +24,13 @@ public class CameraController : MonoBehaviour
     private Quaternion painterRotation;
     private Quaternion runnerRotation;
     private Quaternion currentRotation;
+    bool isPainting;
     void Start()
     {
         runnerOffset = followTf.position - transform.position;
         offset = runnerOffset;
-        painterOffset = new Vector3(0.2f, -4, 6);
-        painterRotation = Quaternion.Euler(15, -0, 0);
+        painterOffset = new Vector3(0.0f, -3.5f, 3) * 0.8f;
+        painterRotation = Quaternion.Euler(25, -0, 0);
         GameManager.Instance.onPhaseChange += HandlePhaseChange;
         runnerRotation = transform.rotation;
         currentRotation = runnerRotation;
@@ -48,6 +48,7 @@ public class CameraController : MonoBehaviour
             offset = painterRotation * painterOffset;
             currentRotation = painterRotation;
         }
+        isPainting = phase == GameManager.GamePhase.Paint;
     }
 
     private void LateUpdate()
@@ -61,7 +62,15 @@ public class CameraController : MonoBehaviour
                 break;
             case FollowMode.SmoothDamp:
                 transform.position = Vector3.SmoothDamp(transform.position, target, ref refVel, smoothTime);
-                transform.rotation = Quaternion.Slerp(transform.rotation, currentRotation, Time.deltaTime * 3);
+                if (isPainting)
+                {
+                    var targetRot = Quaternion.Euler(currentRotation.eulerAngles.x, Mathf.Lerp(30, -20, (followTf.position.x + 3.5f) / 7f), 0);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 5);
+                }
+                else
+                {
+                    transform.rotation = Quaternion.Slerp(transform.rotation, currentRotation, Time.deltaTime * 5);
+                }
                 break;
             default:
                 break;

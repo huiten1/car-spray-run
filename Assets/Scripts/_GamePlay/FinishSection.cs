@@ -12,9 +12,9 @@ public class FinishSection : MonoBehaviour
     {
         for (int i = 0; i < 20; i++)
         {
-            Instantiate(bottlePrefab, transform.position + new Vector3(-2.5f, 0, startDistance + i * offset), Quaternion.identity).hitsToBreak = (i + 1) * 3;
+            Instantiate(bottlePrefab, transform.position + new Vector3(-2.0f, 0, startDistance + i * offset), Quaternion.identity).hitsToBreak = (i + 1) * 3;
             Instantiate(bottlePrefab, transform.position + new Vector3(+0.0f, 0, startDistance + i * offset), Quaternion.identity).hitsToBreak = (i + 1) * 3;
-            Instantiate(bottlePrefab, transform.position + new Vector3(+2.5f, 0, startDistance + i * offset), Quaternion.identity).hitsToBreak = (i + 1) * 3;
+            Instantiate(bottlePrefab, transform.position + new Vector3(+2.0f, 0, startDistance + i * offset), Quaternion.identity).hitsToBreak = (i + 1) * 3;
         }
     }
 }

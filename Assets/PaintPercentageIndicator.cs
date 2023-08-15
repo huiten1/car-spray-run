@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using PaintIn3D;
 using UnityEngine;
-
+[RequireComponent(typeof(P3dChangeCounter))]
 public class PaintPercentageIndicator : MonoBehaviour, IHasIndicator
 {
     [SerializeField] float ratioScale;

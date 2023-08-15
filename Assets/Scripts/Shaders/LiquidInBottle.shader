@@ -18,7 +18,7 @@ Shader "Unlit/FX/Liquid"
         [Header(Sine)]
         _Freq ("Frequency", Range(0,15)) = 8
         _Amplitude ("Amplitude", Range(0,0.5)) = 0.15
-        
+        _FillAmount("Fill amount", Vector) = (0,0,0,0)
     }
     
     SubShader

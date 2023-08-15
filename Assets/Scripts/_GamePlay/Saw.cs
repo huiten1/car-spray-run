@@ -15,6 +15,7 @@ public class Saw : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             other.gameObject.GetComponent<Movement>().KnockBack(20);
+            other.gameObject.GetComponent<Player>().DamageFeedback();
         }
     }
 }

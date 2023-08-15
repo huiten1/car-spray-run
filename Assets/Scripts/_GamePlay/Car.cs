@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[RequireComponent(typeof(PaintPercentageIndicator))]
 public class Car : MonoBehaviour
 {
     [SerializeField] int prize = 1000;
@@ -20,12 +20,11 @@ public class Car : MonoBehaviour
         if (indicator.Value > .99f)
         {
             isPainted = true;
-
             var prefab = Resources.Load<FloatingText>("UI/FloatingText");
-            var floatingText = Instantiate(prefab, transform.position + Vector3.up * 2, Quaternion.identity);
+            var floatingText = Instantiate(prefab, transform.position + Vector3.up * 3, Quaternion.identity);
             floatingText.Text = $"+{prize}$";
-            onPainted?.Invoke();
             GameManager.Instance.Gold += prize;
+            onPainted?.Invoke();
         }
     }
 }

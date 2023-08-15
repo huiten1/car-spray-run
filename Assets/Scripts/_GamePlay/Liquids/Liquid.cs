@@ -15,6 +15,10 @@ public class Liquid : MonoBehaviour
     [SerializeField]
     float fillAmount = 0.5f;
     [SerializeField]
+    float minFill = 0;
+    [SerializeField]
+    float maxFill = 1;
+    [SerializeField]
     float Recovery = 1f;
     [SerializeField]
     float Thickness = 1f;
@@ -140,11 +144,11 @@ public class Liquid : MonoBehaviour
                 comp = (worldPos - new Vector3(0, GetLowestPoint(), 0));
             }
 
-            pos = worldPos - transform.position - new Vector3(0, fillAmount - (comp.y * CompensateShapeAmount), 0);
+            pos = worldPos - transform.position - new Vector3(0, Mathf.Lerp(minFill, maxFill, fillAmount) - (comp.y * CompensateShapeAmount), 0);
         }
         else
         {
-            pos = worldPos - transform.position - new Vector3(0, fillAmount, 0);
+            pos = worldPos - transform.position - new Vector3(0, Mathf.Lerp(minFill, maxFill, fillAmount), 0);
         }
         if (materialIndex > 0)
         {
@@ -205,5 +209,15 @@ public class Liquid : MonoBehaviour
             }
         }
         return lowestVert.y;
+    }
+    public static void SetLiquidColor(Liquid liquid)
+    {
+        var mat = liquid.GetComponent<Renderer>().material;
+        var color = GameManager.Instance.gameData.color;
+        mat.SetColor("_TintColor", color);
+        mat.SetColor("_Tint", color);
+        mat.SetColor("_FoamColor", color);
+        mat.SetColor("_RimColor", color);
+        mat.SetColor("_TopColor", color);
     }
 }

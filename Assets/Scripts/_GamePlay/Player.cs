@@ -7,6 +7,7 @@ public class Player : Singleton<Player>
 {
     public event System.Action<PaintSection> OnEnterPaintSection;
 
+    public event System.Action OnGoPastLastBottle;
     // [SerializeField] ParticleSystem inkPs;
     [SerializeField] ParticleSystem sprayPs;
 
@@ -15,7 +16,7 @@ public class Player : Singleton<Player>
     [SerializeField] Gun inkGun;
     public float fireRate;
     public float fireRange;
-
+    
     readonly Dictionary<Gate.Operation, Func<float, float, float>> operationDict = new()
     {
         {Gate.Operation.Add, (x,y)=> x+y},
@@ -49,9 +50,11 @@ public class Player : Singleton<Player>
         if (phase == GameManager.GamePhase.Paint)
         {
             inkGun.gameObject.SetActive(false);
-            sprayPs.Play();
             sprayGun.SetActive(true);
-            sprayGun.transform.DOLocalMoveX(1, 1f);
+            var targetLocalPos = sprayGun.transform.localPosition;
+            sprayGun.transform.localPosition = inkGun.transform.localPosition;
+            sprayGun.transform.DOLocalMove(targetLocalPos, 1f).onComplete+=sprayPs.Play;
+
             // sprayGun.transform.DORotate(new Vector3(0, -90, 0), 1f);
         }
     }
@@ -64,6 +67,18 @@ public class Player : Singleton<Player>
         if (field == Gate.TargetField.FireRate)
         {
             inkGun.fireRate = operationDict[operation](inkGun.fireRate, value);
+        }
+    }
+    public void DamageFeedback()
+    {
+        inkGun.DamageFeedback();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("LastBottle"))
+        {
+            OnGoPastLastBottle?.Invoke();
         }
     }
 }

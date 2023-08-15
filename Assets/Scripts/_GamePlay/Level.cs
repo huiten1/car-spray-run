@@ -5,10 +5,11 @@ using NaughtyAttributes;
 [System.Serializable]
 public class Level
 {
-    public int level;
+
     [AllowNesting]
     public LevelSection[] levelSections;
-
+    public Car carPrefab;
+    public Color paintColor;
 }
 [System.Serializable]
 public class LevelSection

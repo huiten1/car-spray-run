@@ -13,22 +13,31 @@ public class PropGenerator : MonoBehaviour
     {
         var inkBottle = Resources.Load<GameObject>("Bottles/InkBottle");
         props = Resources.LoadAll<GameObject>("Props");
+        
+        var bottleTrigger=  Resources.Load<GameObject>("BottleTrigger");
         int i = 0;
-        for (float currentDist = startDistance; currentDist < level.length - level.propSpan; currentDist += level.propSpan)
+
+        GameObject lastInkBottle = null;
+        for (float currentDist = startDistance; currentDist < level.length - level.propSpan -5; currentDist += level.propSpan)
         {
             var propToInstantiate = i % 2 == 0 ? props[Random.Range(0, props.Length)] : inkBottle;
 
             var prop = Instantiate(propToInstantiate, startPos + new Vector3(Random.Range(-1, 2) * 2, 0, currentDist), propToInstantiate.transform.rotation);
+            if (i % 2 != 0)
+            {
+                lastInkBottle = prop;
+            }
 
-            if (i % 2 == 0)
-                if (Random.Range(0, 1f) > 0.5f)
-                {
-                    var sideMovement = prop.AddComponent<SideMovement>();
-                    sideMovement.cycleOffset = Random.Range(0, 1f);
-                    sideMovement.span = level.width * 0.5f;
-                    sideMovement.speed = GameManager.Instance.gameData.sideMovementSpeed;
-                }
+            if (Random.Range(0, 1f) > 0.5f)
+            {
+                var sideMovement = prop.AddComponent<SideMovement>();
+                sideMovement.cycleOffset = Random.Range(0, 1f);
+                sideMovement.span = level.width * 0.5f;
+                sideMovement.speed = GameManager.Instance.gameData.obstacleSpeed;
+            }
             i++;
         }
+
+        Instantiate(bottleTrigger, lastInkBottle.transform.position, Quaternion.identity);
     }
 }

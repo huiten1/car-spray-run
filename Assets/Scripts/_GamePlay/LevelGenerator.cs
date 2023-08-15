@@ -6,13 +6,17 @@ using DG.Tweening;
 public class LevelGenerator : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] Level level;
+    [SerializeField] Level[] levels;
+    Level level;
     [SerializeField] PropGenerator propGenerator;
     [SerializeField] RoadGenerator roadGenerator;
 
+    public Level CurrentLevel => levels[GameManager.Instance.gameData.currentLevel % levels.Length];
     List<PaintSection> paintSections = new();
-    void Start()
+    public void Generate()
     {
+        level = CurrentLevel;
+
         Vector3 startPos = transform.position;
         foreach (var levelSection in level.levelSections)
         {
@@ -34,13 +38,20 @@ public class LevelGenerator : MonoBehaviour
                 // startPos += (paintSection.endPos - paintSection.startPos);
             }
         }
-        var car = Instantiate(Resources.Load<GameObject>("Cars/car1"));
+        var car = Instantiate(level.carPrefab).gameObject;
         paintSections[0].AddCar(car);
-        paintSections[0].onTankEmpty += () =>
+        paintSections[0].OnTankEmpty += () =>
         {
-            // car.transform.DOScale(0, 0.3f);
+
             paintSections[0].AddCar(Instantiate(car));
-            paintSections[1].AddCar(car);
+            paintSections[1].AddCar(car, true);
+        };
+        car.GetComponent<Car>().onPainted += () =>
+        {
+            foreach (var paintSection in paintSections)
+            {
+                paintSection.DisableTrigger();
+            }
         };
 
         CanvasManager.Instance.SetPaintProgressTrackingObject(car);

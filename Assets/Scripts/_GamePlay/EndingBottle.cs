@@ -7,7 +7,7 @@ public class EndingBottle : MonoBehaviour, IInteractable, IHasIndicator
 {
     public int hitsToBreak = 1;
     [SerializeField] Liquid liquid;
-    [SerializeField] float maxAmount = 1.4f;
+
     [SerializeField] Cash cash;
     public float Value => hitsToBreak;
     public Action OnValueChange { get; set; }
@@ -17,6 +17,9 @@ public class EndingBottle : MonoBehaviour, IInteractable, IHasIndicator
     void Start()
     {
         maxHP = hitsToBreak;
+        Liquid.SetLiquidColor(liquid);
+        liquid.enabled = false;
+
     }
     public void Interact(GameObject interactor)
     {
@@ -26,6 +29,7 @@ public class EndingBottle : MonoBehaviour, IInteractable, IHasIndicator
     private void TakeHit()
     {
         hitsToBreak -= 1;
+        if (!liquid.enabled) liquid.enabled = true;
         OnValueChange?.Invoke();
         if (hitsToBreak <= 0)
         {
@@ -36,7 +40,7 @@ public class EndingBottle : MonoBehaviour, IInteractable, IHasIndicator
     }
     void Update()
     {
-        liquid.FillAmount = Mathf.SmoothDamp(liquid.FillAmount, Mathf.Lerp(0, maxAmount, (float)hitsToBreak / maxHP), ref fillVel, 0.2f);
+        liquid.FillAmount = Mathf.SmoothDamp(liquid.FillAmount, Mathf.Lerp(0, 1, (float)hitsToBreak / maxHP), ref fillVel, 0.2f);
     }
 
     void OnCollisionEnter(Collision other)

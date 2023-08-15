@@ -21,38 +21,44 @@ public class DebugPanel : MonoBehaviour
         float height = 0;
         foreach (var fieldInfo in fieldInfos)
         {
-            Debug.Log(fieldInfo.Name);
-            TMP_InputField tmpInput = InstantiateUI(gameData, ref height, fieldInfo);
-
             if (fieldInfo.FieldType == typeof(string))
             {
+                TMP_InputField tmpInput = InstantiateUI(gameData, ref height, fieldInfo);
                 tmpInput.contentType = TMP_InputField.ContentType.Alphanumeric;
             }
             if (fieldInfo.FieldType == typeof(int))
             {
+                TMP_InputField tmpInput = InstantiateUI(gameData, ref height, fieldInfo);
                 tmpInput.contentType = TMP_InputField.ContentType.IntegerNumber;
             }
             if (fieldInfo.FieldType == typeof(float))
             {
+                TMP_InputField tmpInput = InstantiateUI(gameData, ref height, fieldInfo);
                 tmpInput.contentType = TMP_InputField.ContentType.DecimalNumber;
             }
             if (fieldInfo.FieldType == typeof(bool))
             {
 
             }
-
-
-            tmpInput.onValueChanged.AddListener((text) =>
+            if (fieldInfo.FieldType == typeof(Color))
             {
-                try
+                var inputField = Instantiate(Resources.Load<GameObject>("UI/DebugColorField"), contentRect);
+                height += (inputField.transform as RectTransform).sizeDelta.y;
+                inputField.transform.GetChild(0).GetComponent<TMP_Text>().SetText(fieldInfo.Name);
+                var colorPicker = inputField.GetComponentInChildren<FlexibleColorPicker>();
+                colorPicker.color = (Color)fieldInfo.GetValue(gameData);
+                colorPicker.onColorChange.AddListener((color) =>
                 {
-                    fieldInfo.SetValue(gameData, Convert.ChangeType(text, fieldInfo.FieldType));
-                }
-                catch (Exception e)
-                {
+                    try
+                    {
+                        fieldInfo.SetValue(gameData, Convert.ChangeType(color, fieldInfo.FieldType));
+                    }
+                    catch (Exception e)
+                    {
 
-                }
-            });
+                    }
+                });
+            }
         }
 
         saveButton.onClick.AddListener(() =>
@@ -64,6 +70,7 @@ public class DebugPanel : MonoBehaviour
         contentRect.sizeDelta = new Vector2(contentRect.sizeDelta.x, height);
     }
 
+
     private TMP_InputField InstantiateUI(GameData gameData, ref float height, FieldInfo fieldInfo)
     {
         var inputField = Instantiate(inputFieldPf, contentRect);
@@ -72,6 +79,18 @@ public class DebugPanel : MonoBehaviour
         var tmpInput = inputField.transform.GetChild(1).GetComponent<TMP_InputField>();
 
         tmpInput.transform.GetChild(0).Find("Placeholder").GetComponent<TMP_Text>().SetText(fieldInfo.GetValue(gameData).ToString());
+        tmpInput.onValueChanged.AddListener((text) =>
+          {
+              try
+              {
+                  fieldInfo.SetValue(gameData, Convert.ChangeType(text, fieldInfo.FieldType));
+              }
+              catch (Exception e)
+              {
+
+              }
+          });
+
         return tmpInput;
     }
 }

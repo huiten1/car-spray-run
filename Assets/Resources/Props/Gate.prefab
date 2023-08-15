@@ -26,7 +26,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1805203162597532355}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -9.2}
+  m_LocalPosition: {x: 0, y: 0, z: -1.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -68,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: fire rate
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c9f8f19595c635b40bcf0d918e8295a3, type: 2}
-  m_sharedMaterial: {fileID: 6415930276292186914, guid: c9f8f19595c635b40bcf0d918e8295a3, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 979b9588d95b7094a82c7b201f70a077, type: 2}
+  m_sharedMaterial: {fileID: 6415930276292186914, guid: 979b9588d95b7094a82c7b201f70a077, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -93,8 +93,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 27.66
+  m_fontSizeBase: 27.66
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -291,6 +291,14 @@ MonoBehaviour:
   value: 10
   fieldNameText: {fileID: 5457599433947074741}
   valText: {fileID: 6940929498725886499}
+  gateRenderer: {fileID: 3712868621487249963}
+  poleRenderers:
+  - {fileID: 3712868621222412878}
+  - {fileID: 3712868620787539282}
+  fireRateColor: {r: 0.7052226, g: 1, b: 0.28627455, a: 1}
+  fireRateGateColor: {r: 0.47510222, g: 0.83137256, b: 0.33333334, a: 1}
+  fireRangeColor: {r: 0.3372549, g: 0.9254902, b: 1, a: 1}
+  fireRangeGateColor: {r: 0.33725488, g: 0.8287135, b: 1, a: 1}
 --- !u!65 &3837599886220213898
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -365,7 +373,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e73987e7db7cc0d4583a6ee52405adf0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -448,7 +456,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: e73987e7db7cc0d4583a6ee52405adf0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -520,7 +528,7 @@ MeshRenderer:
   m_GameObject: {fileID: 3712868621487249972}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
@@ -621,8 +629,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: +2
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: c9f8f19595c635b40bcf0d918e8295a3, type: 2}
-  m_sharedMaterial: {fileID: 6415930276292186914, guid: c9f8f19595c635b40bcf0d918e8295a3, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 979b9588d95b7094a82c7b201f70a077, type: 2}
+  m_sharedMaterial: {fileID: 6415930276292186914, guid: 979b9588d95b7094a82c7b201f70a077, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

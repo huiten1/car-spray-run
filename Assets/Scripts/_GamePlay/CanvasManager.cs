@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.ComponentModel;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,10 +11,11 @@ public class CanvasManager : Singleton<CanvasManager>
     [SerializeField] GameObject HUD;
     [SerializeField] GameObject PaintSectionScreen;
     [SerializeField] ProgressBar paintProgressBar;
+    [SerializeField] TMPro.TMP_Text levelText;
 
     private GameObject currentScreen;
 
-    private void Start()
+    private IEnumerator Start()
     {
         LevelCompleteScreen.SetActive(false);
         StartScreen.SetActive(false);
@@ -22,6 +24,8 @@ public class CanvasManager : Singleton<CanvasManager>
 
         currentScreen = StartScreen;
         currentScreen.SetActive(true);
+        yield return null;
+        levelText.SetText($"Level {GameManager.Instance.gameData.currentLevel + 1}");
     }
     public void ShowHud() => SetScreen(HUD);
     public void ShowStartScreen() => SetScreen(StartScreen);

@@ -14,6 +14,8 @@ public class Cash : MonoBehaviour
             var prefab = Resources.Load<FloatingText>("UI/FloatingText");
             var floatingText = Instantiate(prefab, transform.position, Quaternion.identity);
             floatingText.Text = $"+{amount}$";
+            floatingText.fontSize = 40;
+            floatingText.duration = 1f;
             GameManager.Instance.Gold += amount;
             Destroy(gameObject);
         }

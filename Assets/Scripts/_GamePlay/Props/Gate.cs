@@ -1,3 +1,4 @@
+using System;
 using System.Security;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,6 +12,12 @@ public class Gate : MonoBehaviour, IInteractable
     [SerializeField] TMPro.TMP_Text fieldNameText;
     [SerializeField] TMPro.TMP_Text valText;
 
+    [SerializeField] Renderer gateRenderer;
+    [SerializeField] Renderer[] poleRenderers;
+    [SerializeField] Color fireRateColor;
+    [SerializeField] Color fireRateGateColor;
+    [SerializeField] Color fireRangeColor;
+    [SerializeField] Color fireRangeGateColor;
     public static event System.Action<Operation, TargetField, float> OnEnterGate;
     public enum Operation
     {
@@ -30,8 +37,15 @@ public class Gate : MonoBehaviour, IInteractable
 
     void Start()
     {
+        // targetField = (TargetField)UnityEngine.Random.Range(0, Enum.GetValues(typeof(TargetField)).Length);
+        targetField = UnityEngine.Random.Range(0, 1f) > 0.8f ? TargetField.FireRange : TargetField.FireRate;
         fieldNameText.SetText(targetField.ToString());
         UpdateValText();
+        gateRenderer.material.color = targetField == TargetField.FireRate ? fireRateColor : fireRangeColor;
+        foreach (var item in poleRenderers)
+        {
+            item.material.color = targetField == TargetField.FireRate ? fireRateGateColor : fireRangeGateColor;
+        }
     }
 
     void UpdateValText() => valText.SetText($"{opToChar[operation]}{value}");
